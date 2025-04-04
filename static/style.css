@@ -1,6 +1,6 @@
 /* 기존 스타일 유지 + 말풍선 추가 */
 .chat-container {
-    width: 600px;  /* 기존 400px보다 넓혀줌 */
+    width: 600px;  
     max-width: 90%;
     margin: 50px auto;
     background-color: white;
@@ -9,7 +9,7 @@
 }
 
 #chat-box {
-    height: 7ㅇ00px;
+    height: 700px;
     overflow-y: auto;
     border: 1px solid #ddd;
     padding: 10px;
@@ -29,7 +29,7 @@ button {
 /* 말풍선 스타일 */
 .message {
     display: block;
-    clear: both; /* 이전 float 정리 */
+    clear: both; 
     max-width: 90%;
     padding: 12px 16px;
     margin: 8px 0;
