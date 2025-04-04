@@ -1,0 +1,74 @@
+<!-- 브라우저에 보여지는 화면 -->
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+	<!-- 브라우저 탭 제목 -->
+	<title> 해피니스 챗봇 </title>
+
+	<!-- flask가 static 폴더 안에 style.css 찾아서 연결 --> 
+	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <!-- 챗봇 UI 전체를 감싸는 컨테이너 -->
+    <div class="chat-container">
+
+        <!-- 화면 상단의 제목 -->
+	<h1>안녕! MZ 너의 미래를 설계해봐 🤖</h1>
+
+        <!-- 채팅 메시지들이 표시될 영역 -->
+        <div id="chat-box"></div>
+
+        <!-- 사용자 메시지 입력창 -->
+        <input type="text" id="user-input" placeholder="메시지를 입력하세요...">
+
+        <!-- 메시지 전송 버튼: 클릭 시 sendMessage() 실행 -->
+        <button onclick="sendMessage()">보내기</button>
+ 
+    <!-- JavaScript로 챗봇 기능 처리 -->
+    <script>
+    // 페이지 로드된 후 실행되게 설정
+    window.onload = function () {
+        function sendMessage() {
+            // 입력창에서 사용자가 입력한 메시지를 가져옴
+            const userInput = document.getElementById("user-input").value;
+
+            // 채팅 박스 DOM 요소
+            const chatBox = document.getElementById("chat-box");
+
+            // 사용자 말풍선
+            chatBox.innerHTML += `<div class="message user-message">${userInput}</div>`;
+
+            // Flask 서버로 메시지 전송 (POST 요청)
+            fetch("/get", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: userInput })
+            })
+            .then(response => response.json()) // 서버 응답을 JSON으로 받음
+            .then(data => {
+                // 챗봇 말풍선
+                chatBox.innerHTML += `<div class="message bot-message">${data.response}</div>`;
+
+                // 입력창 비우기
+                document.getElementById("user-input").value = "";
+
+                // 채팅창 스크롤을 가장 아래로 내리기
+                chatBox.scrollTop = chatBox.scrollHeight;
+            });
+        }
+
+    // 엔터키로 메시지 전송
+    document.getElementById("user-input").addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+            sendMessage();
+        }
+    });
+
+        // 버튼 클릭 시 메시지 전송
+        document.querySelector("button").addEventListener("click", sendMessage);
+    };
+    </script>
+</body>
+</html>
